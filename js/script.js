@@ -4,8 +4,9 @@ document.getElementById('loadQuote').addEventListener("click", printQuote, false
 
 //variables
 var index;
+var usedQuotes = [];
 var selectedQuote;
-var fullQuote = "";
+var fullQuote;
 
 //arrays and objects
 var quote = [
@@ -35,18 +36,29 @@ var quote = [
 
 //functions
 
+//clears a selected ID's content
+/*function clearBox(elementID) {
+	document.getElementById( elementID ).innerHTML = '';
+}*/
+
+//selects ID from HTML
 function quote_box(message) {
 	var quoteBox = document.getElementById('quote-box');
 	quoteBox.innerHTML = message;
 }
 
+//selects random quote
 function getRandomQuote() { 
- 	index = Math.floor(Math.random() * (quote.length - 1)) + 1;
-	return quote[index];	
+ 	index = Math.floor(Math.random() * ((quote.length + 1) - 1));
+ 		return quote[index];
+
 }
 
+//generates HTML string format of quote and adds to page by calling quote_box()
 function printQuote() {
+	
 	selectedQuote = getRandomQuote();
+	fullQuote = "";
 	fullQuote += "<p class='quote'>" + selectedQuote.quote + "</p>";
 	fullQuote += "<p class='source'>" + selectedQuote.source;
 	if (selectedQuote.citation) {
