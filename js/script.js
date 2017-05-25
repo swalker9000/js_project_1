@@ -7,6 +7,7 @@ var index;
 var usedQuotes = [];
 var selectedQuote;
 var fullQuote;
+var rgbColor = "";
 
 //arrays and objects
 var quote = [
@@ -47,17 +48,34 @@ function quote_box(message) {
 	quoteBox.innerHTML = message;
 }
 
+function randomColor() {
+	var red = Math.floor(Math.random() * 256);
+	var blue = Math.floor(Math.random() * 256);
+	var green = Math.floor(Math.random() * 256);
+	rgbColor = "";
+	rgbColor += "rgb(" + red + ", " + blue + ", " + green + ")";
+	return rgbColor;
+}
+
 //selects random quote
 function getRandomQuote() { 
  	index = Math.floor(Math.random() * ((quote.length + 1) - 1));
-
+ //checks to see if quote has been used
  	if (usedQuotes.indexOf(index) === -1) {
  		usedQuotes.push(index);
+ 		//randomizes background color
+ 		document.getElementById('background').style.backgroundColor = randomColor();
+ 		document.getElementById('loadQuote').style.backgroundColor = rgbColor;
+ 		console.log(quote[index]);
  		return quote[index];
- 	} else if (usedQuotes.indexOf(index) > -1 && usedQuotes.length !== quote.length) {
+ 	}
+  //checks to see if all quotes have been used at least once
+ 	else if (usedQuotes.indexOf(index) > -1 && usedQuotes.length !== quote.length) {
  		getRandomQuote();
  		return quote[index];
- 	} else {
+ 	} 
+ //if al quotes have been used once - resets tracker and generates new quote
+ 	else {
  		usedQuotes.splice(0);
  		getRandomQuote();
  		return quote[index];
