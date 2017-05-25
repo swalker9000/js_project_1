@@ -50,9 +50,21 @@ function quote_box(message) {
 //selects random quote
 function getRandomQuote() { 
  	index = Math.floor(Math.random() * ((quote.length + 1) - 1));
- 		return quote[index];
 
-}
+ 	if (usedQuotes.indexOf(index) === -1) {
+ 		usedQuotes.push(index);
+ 		return quote[index];
+ 	} else if (usedQuotes.indexOf(index) > -1 && usedQuotes.length !== quote.length) {
+ 		getRandomQuote();
+ 		return quote[index];
+ 	} else {
+ 		usedQuotes.splice(0);
+ 		getRandomQuote();
+ 		return quote[index];
+ 	
+ 	}
+ }
+
 
 //generates HTML string format of quote and adds to page by calling quote_box()
 function printQuote() {
