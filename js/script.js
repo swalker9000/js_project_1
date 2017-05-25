@@ -4,43 +4,70 @@ document.getElementById('loadQuote').addEventListener("click", printQuote, false
 
 //variables
 var index;
-var usedQuotes = [];
+var tracker = [];
 var selectedQuote;
 var fullQuote;
 var rgbColor = "";
+var timeoutID;
 
 //arrays and objects
-var quote = [
+var quotes = [
 	{
 		quote: "It always seems impossible until it is done.",
-	 	source: "Nelson Mandela"
+	 	source: "Nelson Mandela",
+	 	citation: "",
+	 	year: "",
+	 	tags: ["inspirational", "possitive", "motivational"]
 	 },
 	{
 		quote: "A bird doesn't sing because it has an answer, it sings because it has a song.",
-		source: "Maya Angelou"
+		source: "Maya Angelou",
+		citation: "",
+		year: "",
+		tags: ["positive", "inspirational"]
 	},
 	{
 		quote: "To infinity and beyond.",
 		source: "Buzz Lightyear",
-		citation: "Toy Story"
+		citation: "Toy Story",
+		year: "",
+		tags: ["movie quote", "inspirational", "motivational"]
 	},
 	{
 		quote: "The best way out is always through.",
-		source: "Robert Frost"
+		source: "Robert Frost",
+		citation: "",
+		year: "",
+		tags: ["inspirational", "motivational"]
 	},
 	{
 		quote: "When life get you down, do you wanna know what you've gotta do? Just keep swimming!",
 		source: "Dory",
-		citation: "Finding Nemo"
+		citation: "Finding Nemo",
+		year: "",
+		tags: ["movie quote", "inspirational", "motivational"]
+	},
+	{
+		quote: "There's no place like home.",
+		source: "Judy Garland as Dorothy",
+		citation: "Wizard of Oz",
+		year: "1939"
+	},
+	{
+		quote: "My mama always said life was like a box of chocolates. You never know what you're gonna get.",
+		source: "Tom Hanks as Forrest Gump",
+		citation: "Forrest Gump",
+		year: "1994"
+	},
+	{
+		quote: "Carpe diem. Seize the day, boys. Make your lives extraordinary.",
+		source: "Robin Williams as John Keating",
+		citation: "Dead Poets Society",
+		year: "1989"
 	}
 ];
 
 //functions
-
-//clears a selected ID's content
-/*function clearBox(elementID) {
-	document.getElementById( elementID ).innerHTML = '';
-}*/
 
 //selects ID from HTML
 function quote_box(message) {
@@ -57,47 +84,65 @@ function randomColor() {
 	return rgbColor;
 }
 
+//creates interval timer for quotes if button is not pushed
+function interval() {
+	timeoutID = window.setTimeout(printQuote, 10000);
+}	
+
 //selects random quote
 function getRandomQuote() { 
- 	index = Math.floor(Math.random() * ((quote.length + 1) - 1));
+ 	index = Math.floor(Math.random() * ((quotes.length + 1) - 1));
  //checks to see if quote has been used
- 	if (usedQuotes.indexOf(index) === -1) {
- 		usedQuotes.push(index);
+ 	if (tracker.indexOf(index) === -1) {
+ 		tracker.push(index);
  		//randomizes background color
  		document.getElementById('background').style.backgroundColor = randomColor();
  		document.getElementById('loadQuote').style.backgroundColor = rgbColor;
- 		console.log(quote[index]);
- 		return quote[index];
+ 		console.log(quotes[index]);
+ 		return quotes[index];
  	}
   //checks to see if all quotes have been used at least once
- 	else if (usedQuotes.indexOf(index) > -1 && usedQuotes.length !== quote.length) {
+ 	else if (tracker.indexOf(index) > -1 && tracker.length !== quotes.length) {
  		getRandomQuote();
- 		return quote[index];
+ 		return quotes[index];
  	} 
- //if al quotes have been used once - resets tracker and generates new quote
+ //if all quotes have been used once - resets tracker and generates new quote
  	else {
- 		usedQuotes.splice(0);
+ 		tracker.splice(0);
  		getRandomQuote();
- 		return quote[index];
+ 		return quotes[index];
  	
  	}
  }
 
 
-//generates HTML string format of quote and adds to page by calling quote_box()
+//concats HTML string of quote and adds to page by calling quote_box()
 function printQuote() {
-	
+	//clears timer
+	clearTimeout(timeoutID);
+	//sets return value of getRandomQuote() to new variable
 	selectedQuote = getRandomQuote();
+	//concats string into variable fullQuote
 	fullQuote = "";
 	fullQuote += "<p class='quote'>" + selectedQuote.quote + "</p>";
 	fullQuote += "<p class='source'>" + selectedQuote.source;
+	//checks to see if citation property has a value
 	if (selectedQuote.citation) {
 	fullQuote += "<span class='citation'>" + selectedQuote.citation + "</span>";
 }
+	//checks to see if year property has a value
 	if (selectedQuote.year) {
 	fullQuote += "<span class='year'>" + selectedQuote.year + "</span>";
 }
 	fullQuote += "</p>";
+	//selects HTML id and adds message to it
 	quote_box(fullQuote);
+	//starts new timer
+	interval();
 }
-	
+
+//starts interval upon loading page
+interval();
+
+
+
